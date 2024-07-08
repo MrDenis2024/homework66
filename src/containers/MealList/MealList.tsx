@@ -8,6 +8,7 @@ import Meals from '../../components/Meals/Meals';
 const MealList = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchMeals = useCallback( async () => {
     try {
@@ -35,13 +36,28 @@ const MealList = () => {
     void fetchMeals();
   }, [fetchMeals]);
 
+  const deleteMeal = async (id: string) => {
+    try {
+      if(window.confirm('Are you sure you want to delete this meal?')) {
+        setDeleteLoading(true);
+        await axiosApi.delete(`/meals/${id}.json`);
+        void fetchMeals();
+      }
+    } catch (e) {
+      console.error('Ошибка удаления');
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
 
   let meal = (
     <>
       {meals.length > 0 ? (
-        <> {meals.map((meal) => (
-        <Meals key={meal.id} meal={meal} />
-      ))}</>
+        <>
+          {meals.map((meal) => (
+            <Meals key={meal.id} meal={meal} deleteMeal={() => deleteMeal(meal.id)} deleteLoading={deleteLoading} />
+          ))}
+        </>
       ) : (
         <p className='text-center'><strong>Add what you ate</strong></p>
       )}

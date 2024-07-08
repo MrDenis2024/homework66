@@ -26,7 +26,7 @@ const MealForm: React.FC<Props> = ({onSubmit, isLoading}) => {
 
     onSubmit ({
       ...mealMutation,
-      calories: parseFloat(mealMutation.calories)
+      calories: parseFloat(mealMutation.calories),
     });
   };
 
