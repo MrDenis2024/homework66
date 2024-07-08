@@ -38,10 +38,10 @@ const MealForm: React.FC<Props> = ({onSubmit, isLoading}) => {
           <label htmlFor="meal">Meal time</label>
           <select id="meal" className="form-control" name="meal" required onChange={changeMeal} value={mealMutation.meal}>
             <option value="">Select a meal time</option>
-            <option value="breakfast">Breakfast</option>
-            <option value="snack">Snack</option>
-            <option value="lunch">Lunch</option>
-            <option value="dinner">Dinner</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Snack">Snack</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
           </select>
         </div>
         <div className="form-group mt-3">

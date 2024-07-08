@@ -10,7 +10,7 @@ const App = () => {
     <Layout>
       <Routes>
         <Route path='/' element={<MealList />} />
-        <Route path='/add-meal' element={<NewMeal />} />
+        <Route path='/meals/new' element={<NewMeal />} />
         <Route path='*' element={<div className="text-center mt-5"><strong>Данной страницы не найдено вернитесь
           пожалуйста обратно!</strong></div>}/>
       </Routes>

@@ -1,12 +1,69 @@
 import {Link} from 'react-router-dom';
+import {useCallback, useEffect, useState} from 'react';
+import {ApiMeals, Meal} from '../../types';
+import axiosApi from '../../axiosApi';
+import Spinner from '../../components/Spinner/Spinner';
+import Meals from '../../components/Meals/Meals';
 
 const MealList = () => {
+  const [meals, setMeals] = useState<Meal[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchMeals = useCallback( async () => {
+    try {
+      setLoading(true);
+      const {data: meals} = await axiosApi.get<ApiMeals | null>('/meals.json');
+
+      if(!meals) {
+        setMeals([]);
+      } else {
+        const newMeals = Object.keys(meals).map((id) => ({
+          ...meals[id],
+          id,
+        }));
+
+        setMeals(newMeals);
+      }
+    } catch (e) {
+      console.error('Ошибка получение данных с сервера');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchMeals();
+  }, [fetchMeals]);
+
+
+  let meal = (
+    <>
+      {meals.length > 0 ? (
+        <> {meals.map((meal) => (
+        <Meals key={meal.id} meal={meal} />
+      ))}</>
+      ) : (
+        <p className='text-center'><strong>Add what you ate</strong></p>
+      )}
+    </>
+  );
+
+  if(loading) {
+    meal = (
+      <div className="d-flex justify-content-center align-items-center" style={{height: '300px'}}>
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <div>
-      <div className='d-flex justify-content-between mt-5'>
-        <p>Total calories</p>
-        <Link to='/add-meal' className='btn btn-primary'>Add new meal</Link>
+      <div className="d-flex justify-content-between my-5">
+        <p>Total calories: <strong>{meals.reduce((sum, meal) =>{
+          return sum + meal.calories;
+        }, 0)} kcal</strong></p>
+        <Link to='/meals/new' className='btn btn-primary'>Add new meal</Link>
       </div>
+      {meal}
     </div>
   );
 };

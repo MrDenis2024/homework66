@@ -13,3 +13,7 @@ export interface MealMutation {
   calories: string;
 }
 
+export interface ApiMeals {
+  [id: string]: ApiMeal;
+}
+
