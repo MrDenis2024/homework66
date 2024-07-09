@@ -5,14 +5,18 @@ import ButtonSpinner from '../Spinner/ButtonSpinner';
 interface Props {
   onSubmit: (meal: ApiMeal) => void;
   isLoading: boolean;
+  existingMeal?: ApiMeal;
 }
 
-const MealForm: React.FC<Props> = ({onSubmit, isLoading}) => {
-  const [mealMutation, setMealMutation] = useState<MealMutation>( {
-    meal: '',
-    description: '',
-    calories: '',
-  });
+const emptyState: MealMutation = {
+  meal: '',
+  description: '',
+  calories: '',
+};
+
+const MealForm: React.FC<Props> = ({onSubmit, isLoading, existingMeal}) => {
+  const initialState: MealMutation = existingMeal ? ({...existingMeal, calories: existingMeal.calories.toString()}) : emptyState;
+  const [mealMutation, setMealMutation] = useState<MealMutation>( initialState);
 
   const changeMeal = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setMealMutation((prevState) => ({
@@ -32,7 +36,7 @@ const MealForm: React.FC<Props> = ({onSubmit, isLoading}) => {
 
   return (
     <div className="mt-4 border border-black rounded px-5 py-3">
-      <h2>Add a meal</h2>
+      <h2>{existingMeal ? 'Edit meal' : 'Add new meal'}</h2>
       <form className="mt-4" onSubmit={onFormSubmit}>
         <div className="form-group">
           <label htmlFor="meal">Meal time</label>

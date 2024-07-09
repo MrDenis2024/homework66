@@ -4,6 +4,7 @@ import {ApiMeals, Meal} from '../../types';
 import axiosApi from '../../axiosApi';
 import Spinner from '../../components/Spinner/Spinner';
 import Meals from '../../components/Meals/Meals';
+import {toast} from 'react-toastify';
 
 const MealList = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
@@ -41,6 +42,7 @@ const MealList = () => {
       if(window.confirm('Are you sure you want to delete this meal?')) {
         setDeleteLoading(true);
         await axiosApi.delete(`/meals/${id}.json`);
+        toast.success('Приём пищи удалён');
         void fetchMeals();
       }
     } catch (e) {
